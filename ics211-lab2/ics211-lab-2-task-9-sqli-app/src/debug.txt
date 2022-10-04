@@ -1,0 +1,1 @@
+SELECT ID, name, locale, lastlogin, gender FROM user WHERE (name = 'peter');-- ' OR email = 'peter');-- ') AND pass = 'da39a3ee5e6b4b0d3255bfef95601890afd80709'

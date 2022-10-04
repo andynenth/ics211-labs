@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab 1 - JS Review: Playing with Three.js</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<script src="js/three.js"></script>
+<script>
+    /********************************************
+     Three.js is a 3D JavaScript library.
+     It uses WebGL, a JavaScript library for rendering
+     3D graphics.
+
+     It requires three things to display anything:
+     a) a scene
+     b) a camera
+     c) a renderer
+     *********************************************/
+        // instantiate a scene
+    const scene = new THREE.Scene();
+
+    // instantiate a camera, i.e. the view into the world
+    // 1st argument: field-of-view in degrees
+    // 2nd argument: aspect ratio. innerWidth/Height is the browser window
+    // 3rd argument: near plane. Anything nearer, won't be rendered
+    // 4th argument: far plane. Anything farther, won't be rendered
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+    // register an event handler for the resize event. OnResize() is the handler, i.e. the function
+    // that will be called when the window in the browser is resized. The false means to capture the
+    // event during the bubbling phase (the event propagates up the DOM tree). We'll discuss this more
+    // later in the course.
+    window.addEventListener('resize', onResize, false);
+
+    // If the window changes, this fixes everything for the new size
+    function onResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    // instantiate a renderer and add it to the DOM
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+
+    /*****************************************
+     * Cube Colors!
+     * 0xff0000 is Red
+     * 0x800080 is Purple
+     * 0x008000 is Green
+     * 0xffff00 is Yellow
+     * 0x0000ff is Blue
+     *****************************************/
+    const cubeColors = [0xff0000, 0x800080, 0x008000, 0xffff00, 0x0000ff];
+
+    /******************************************
+     * #1 TODO: YOUR CODE GOES here
+     *
+     * a) Declare an array of cubes
+     * b) Declare and initialize an array
+     * of JS Objects for rotations for each cube.
+     * There will be a total of 5 cubes.
+     *******************************************/
+    let cubes = [];
+    /************************************************
+     Place an Object into the Scene
+
+     Objects need three things:
+     a) a geometry
+     b) a material
+     c) a mesh
+     **************************************************/
+
+        // Array of 5 rotational values for each cube
+    let rotations = [
+            {
+                x: 0.04,
+                y: 0,
+                z: 0
+            },
+            {
+                x: 0.04,
+                y: 0,
+                z: 0.05
+            },
+            {
+                x: 0,
+                y: -0.01,
+                z: -0.01
+            },
+            {
+                x: -0.03,
+                y: 0.01,
+                z: 0
+            },
+            {
+                x: 0,
+                y: -0.02,
+                z: 0.07
+            }
+        ];
+
+
+    /**************************************************
+     * This is an example of placing a single cube in
+     * the scene:
+     ***************************************************/
+    /* --------- COMMENT OUT STARTING HERE AFTER TODO COMPLETED BELOW -----------
+    // create a geometry for a cube
+    const geometry = new THREE.BoxGeometry();
+    // material is for its surface used here to give it color
+    const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    // mesh puts the geometry and material together
+    const cube = new THREE.Mesh( geometry, material );
+    // add the cube to the scene - at position 0,0,0 (x,y,z)
+    cube.position.set(0,0,0);
+    scene.add( cube );
+     */
+
+    /* --------- COMMENT OUT TILL HERE --------------*/
+
+    /***************************************************
+     * #2 TODO: YOUR CODE GOES BELOW THIS COMMENT BLOCK
+     *
+     * What you need to do:
+     * - Use a forEach() loop to iterate through the cubeColors array
+     * - it should call an anonymous function that creates a new cube,
+     * positions it at index*5,0,0 adds it to the scene, and stores a
+     * reference of it in your previously declared cubes array.
+     ****************************************************/
+    const geometry = new THREE.BoxGeometry();
+    const material = cubeColor => new THREE.MeshBasicMaterial({color: cubeColor});
+    const cube = (geometry, material) => new THREE.Mesh(geometry, material);
+
+    const setupCubes = (cube, index) => {
+        // set the position of cube
+        cube.position.set((index) * 5, 0, 0);
+        // store a cube into cubes array
+        cubes.push(cube);
+        scene.add(cube);
+    }
+
+    cubeColors.forEach((cubeColor, index) => {
+            setupCubes(cube(geometry, material(cubeColor)), index);
+        }
+    );
+
+    /***************************************************
+     * #3 TODO: YOUR CODE GOES BELOW THIS COMMENT BLOCK
+     *
+     * What you need to do:
+     * - When you add more cubes, you will also need
+     * to move the camera along the x axis to centre it on
+     * all the new cubes. Leave the current camera's z position
+     * as is.
+     ****************************************************/
+
+    camera.position.x = 10;
+    camera.position.z = 10;
+
+    // animate the scene
+    function animate() {
+        // https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+        // This tells the browser to redraw the scene usually 60 times per second but it
+        // will try to match the refresh rate of your display. It stops executing if the browser's
+        // tab isn't active.
+        window.requestAnimationFrame(animate);
+
+        /***************************************************
+         * #4 TODO: YOUR CODE GOES BELOW THIS COMMENT BLOCK
+         *
+         * What you need to do:
+         * - Use a forEach() loop to iterate through the cubes array
+         * - it should call an anonymous function that rotates each
+         * cube's x, y, and z value by the corresponding value in
+         * the rotations array.
+         ****************************************************/
+
+        cubes.forEach((cube, index) => {
+                cube.rotation.x += rotations[index].x;
+                cube.rotation.y += rotations[index].y;
+                cube.rotation.z += rotations[index].z;
+            }
+        );
+
+        // rotate a single cube via its x and y axis
+        // #5 TODO: Comment out these three statements when
+        // you implement the forEach() above
+        /*
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        cube.rotation.z += 0.00;
+        */
+
+        // Render the scene
+        renderer.render(scene, camera);
+    }
+
+    animate();
+</script>
+</body>
+</html>

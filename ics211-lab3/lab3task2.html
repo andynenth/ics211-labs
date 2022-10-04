@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab 3 Task 2 by Andy Nenthong</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<script type="text/babel">
+
+    const my2DArray = [
+        [ "Alien", "https://www.rottentomatoes.com/m/alien" ],
+        [ "The Lion King", "https://www.imdb.com/title/tt0110357/" ],
+        [ "Pulp Fiction", "https://www.youtube.com/watch?v=s7EdQ4FqbhY" ]
+    ];
+
+    ReactDOM.render(
+        <>
+            <h1>Favorite Movies</h1>
+            <h3>by Andy Nenthong</h3>
+            <ol>
+                <li>{my2DArray[0][0]}:&nbsp;&nbsp;<a
+                    href={"" + my2DArray[0][1]}>{my2DArray[0][1]}</a></li>
+                <li>{my2DArray[1][0]}:&nbsp;&nbsp;<a
+                    href={"" + my2DArray[1][1]}>{my2DArray[1][1]}</a></li>
+                <li>{my2DArray[2][0]}:&nbsp;&nbsp;<a
+                    href={"" + my2DArray[2][1]}>{my2DArray[2][1]}</a>
+                </li>
+            </ol>
+        </>,
+        document.getElementById('container')
+    );
+
+</script>
+</body>
+</html>

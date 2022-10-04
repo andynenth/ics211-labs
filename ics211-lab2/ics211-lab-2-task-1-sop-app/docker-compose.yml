@@ -1,0 +1,13 @@
+version: "3"
+services:
+  web:
+    container_name: php-apache
+    build: ./web
+    image: ics211/sop-srv
+    ports:
+      # Publish the port so it's visible on the host at 8085 or 8086.
+      - 8085:80
+      - 8086:81
+    volumes:
+      # Mount the src dir so changes to the code are reflected in the container.
+      - ./src:/var/www/html

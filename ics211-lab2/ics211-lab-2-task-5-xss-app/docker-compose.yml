@@ -1,0 +1,26 @@
+version: "3"
+services:
+  web:
+    container_name: php-apache
+    build: ./web
+    image: ics211/xss-srv
+    ports:
+      # Publish the port so it's visible on the host at 8088.
+      - 8088:80
+    links:
+      - db
+    volumes:
+      # Mount the src dir so changes to the code are reflected in the container.
+      - ./src:/var/www/html
+  db:
+    container_name: mysql
+    image: mysql:5.5 
+    ports:
+      # Publish the port so it's visible on the host, you can access the db directly.
+      - 3306:3306
+    environment:
+      # Environment variables to configure MySQL on startup.
+      - MYSQL_ROOT_PASSWORD=seedubuntu
+    volumes:
+      # This will cause the sql scripts in the db folder to be executed
+      - ./db:/docker-entrypoint-initdb.d

@@ -6,6 +6,8 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/react-is@17/umd/react-is.development.js"></script>
+    <script src="https://unpkg.com/styled-components/dist/styledcomponents.min.js"></script>
 </head>
 <body>
 <div id="container"></div>
@@ -50,21 +52,26 @@
         return <ol>
             {
                 movies.map( movie =>
-                    <FavoriteItem is={movie.id} {...movie} />
+                    <FavoriteItem id={movie.id} {...movie} />
                 )
             }
         </ol>;
     }
 
-    const App = () => {
-        return <>
+    const App = ({className}) => {
+        return <div className={className}>
             <Header />
             <FavoriteItemList />
-        </>;
+        </div>;
     }
 
+    const StyledApp = styled(App)`
+        font-size: 30pt;
+        color: navy;
+    `;
+
     ReactDOM.render(
-        <App />, document.getElementById('container')
+        <StyledApp />, document.getElementById('container')
     );
 
 </script>

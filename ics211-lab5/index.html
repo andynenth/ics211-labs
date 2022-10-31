@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab 4 by Andy Nenthong</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<script type="text/babel">
+
+    const Header = () => {
+        return <>
+            <h1>Favorite Movies</h1>
+            <h3>by Andy Nenthong</h3>
+        </>;
+    }
+
+    // Task 2
+    const FavoriteItem = ({itemName, itemLink}) => {
+        return <li>{itemName}:&nbsp;&nbsp;
+            <a href={"" + itemLink}>{itemLink}</a>
+        </li>;
+    }
+
+    const FavoriteItemList = () => {
+        /*
+        const movies = [
+            [ "Alien", "https://www.rottentomatoes.com/m/alien" ],
+            [ "The Lion King", "https://www.imdb.com/title/tt0110357/" ],
+            [ "Pulp Fiction", "https://www.youtube.com/watch?v=s7EdQ4FqbhY" ]
+        ];
+        */
+
+        const movies = [
+            {id:0, itemName:"Alien", itemLink:"https://www.rottentomatoes.com/m/alien"},
+            {id:1, itemName:"The Lion King", itemLink:"https://www.imdb.com/title/tt0110357/"},
+            {id:2, itemName:"Pulp Fiction", itemLink:"https://www.youtube.com/watch?v=s7EdQ4FqbhY"}
+        ];
+        /*
+        return <ol>
+            <FavoriteItem itemName={movies[0][0]} itemLink={movies[0][1]} />
+            <FavoriteItem itemName={movies[1][0]} itemLink={movies[1][1]} />
+            <FavoriteItem itemName={movies[2][0]} itemLink={movies[2][1]} />
+        </ol>;
+         */
+        // map with spread attributes
+        return <ol>
+            {
+                movies.map( movie =>
+                    <FavoriteItem is={movie.id} {...movie} />
+                )
+            }
+        </ol>;
+    }
+
+    const App = () => {
+        return <>
+            <Header />
+            <FavoriteItemList />
+        </>;
+    }
+
+    ReactDOM.render(
+        <App />, document.getElementById('container')
+    );
+
+</script>
+</body>
+</html>

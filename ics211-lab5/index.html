@@ -2,12 +2,15 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Lab 4 by Andy Nenthong</title>
+    <title>Lab 5 by Andy Nenthong</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@900&family=Mulish:wght@600&family=Ubuntu:ital,wght@1,500&display=swap" rel="stylesheet">
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/react-is@17/umd/react-is.development.js"></script>
-    <script src="https://unpkg.com/styled-components/dist/styledcomponents.min.js"></script>
+    <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
 </head>
 <body>
 <div id="container"></div>
@@ -15,16 +18,16 @@
 
     const Header = () => {
         return <>
-            <h1>Favorite Movies</h1>
-            <h3>by Andy Nenthong</h3>
+            <StyledHeader>Favorite Movies</StyledHeader>
+            <StyledName>by Andy Nenthong</StyledName>
         </>;
     }
 
     // Task 2
-    const FavoriteItem = ({itemName, itemLink}) => {
-        return <li>{itemName}:&nbsp;&nbsp;
+    const FavoriteItem = ({itemName, itemLink, marginLeft}) => {
+        return <StyledListItem marginLeft={marginLeft}>{itemName}:&nbsp;&nbsp;
             <a href={"" + itemLink}>{itemLink}</a>
-        </li>;
+        </StyledListItem>;
     }
 
     const FavoriteItemList = () => {
@@ -37,9 +40,9 @@
         */
 
         const movies = [
-            {id:0, itemName:"Alien", itemLink:"https://www.rottentomatoes.com/m/alien"},
-            {id:1, itemName:"The Lion King", itemLink:"https://www.imdb.com/title/tt0110357/"},
-            {id:2, itemName:"Pulp Fiction", itemLink:"https://www.youtube.com/watch?v=s7EdQ4FqbhY"}
+            {id:0, itemName:"Alien", itemLink:"https://www.rottentomatoes.com/m/alien", marginLeft: '0px'},
+            {id:1, itemName:"The Lion King", itemLink:"https://www.imdb.com/title/tt0110357/", marginLeft: '16px'},
+            {id:2, itemName:"Pulp Fiction", itemLink:"https://www.youtube.com/watch?v=s7EdQ4FqbhY", marginLeft: '32px'}
         ];
         /*
         return <ol>
@@ -64,11 +67,43 @@
             <FavoriteItemList />
         </div>;
     }
-
+    // Add at least 3
     const StyledApp = styled(App)`
-        font-size: 30pt;
-        color: navy;
+      margin: 40px;
+      padding: 30px;
+      background-color: Maroon;
+      border-radius: 30px;
+      li:hover {
+        color: gold;
+      }
+      a {
+        color: Ivory;
+      }
+      a:hover {
+        color: Crimson;
+      }
+      a:link {
+        text-decoration: none;
+      }
     `;
+    const StyledHeader = styled.h1`
+      font-family: 'Lato', sans-serif;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-size: 3rem;
+      color: white;
+    `
+    const StyledName = styled.h3`
+      font-family: 'Ubuntu', sans-serif;
+      letter-spacing: 3px;
+      color: #ffb536;
+    `
+    const StyledListItem = styled.li`
+      font-family: 'Mulish', sans-serif;
+      margin-left: ${props => props.marginLeft};
+      padding-top: 5px;
+      color: Moccasin;
+    `
 
     ReactDOM.render(
         <StyledApp />, document.getElementById('container')

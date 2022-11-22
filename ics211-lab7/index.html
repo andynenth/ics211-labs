@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab 6 by Andy Nenthong</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@900&family=Mulish:wght@600&family=Ubuntu:ital,wght@1,500&display=swap" rel="stylesheet">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/react-is@17/umd/react-is.development.js"></script>
+    <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<script type="text/babel">
+
+    const Header = () => {
+        return <>
+            <StyledHeader>Favorite Movies</StyledHeader>
+            <StyledName>by Andy Nenthong</StyledName>
+        </>;
+    }
+
+    // Task 2
+    const FavoriteItem = ({id, itemName, itemLink, marginLeft, checked}) => {
+        if (checked) {
+            return <StyledListItem marginLeft={marginLeft}>{itemName}:&nbsp;&nbsp;
+                <a href={"" + itemLink}>{itemLink}</a>
+            </StyledListItem>;
+        }
+        else{
+            return null;
+        }
+    }
+
+
+    const FavoriteItemList = ({favouriteItemList}) => {
+        return <ol>
+            {
+                favouriteItemList.map(
+                    (
+                        movies  // check this parameter
+                    ) => (
+                        <FavoriteItem id={movies.id} {...movies} />
+                    )
+                )
+            }
+        </ol>;
+    }
+
+    const FavoriteItemForm = ({favouriteItemList, setShowForm}) => {
+        // Initiate checkboxGroup as an array of five boolean values, all false
+        // const [checkboxGroup, setCheckboxGroup] = React.useState([false,false,false,false,false]);
+        const [checkboxGroup, setCheckboxGroup] = React.useState(Array(5).fill(false));
+
+        const handleCheckbox = e => {
+            let index = parseInt(e.target.value, 10);
+            let checkboxes = checkboxGroup.slice();
+            checkboxes[index] = e.target.checked;
+            setCheckboxGroup(checkboxes);
+        }
+
+        const handleSubmit = e => {
+            e.preventDefault();
+            Promise.all(
+                checkboxGroup.map(async(value, index) => {
+                    try {
+                        await axios.patch(`http://10.21.75.149:3004/movies/${index}`, {
+                            "checked": value
+                        });
+                    } catch (error) {
+                        console.log('API Error: ' + error);
+                    }
+                })
+            ).then( () => {
+                setShowForm(false);
+            });
+        }
+
+
+
+        // let enableSubmit = ((cbg, atLeastOneChecked = false)=>{
+        //   cbg.forEach((checkboxValue) => {
+        //     atLeastOneChecked = atLeastOneChecked || checkboxValue;
+        //   });
+        //   return atLeastOneChecked;
+        // })(checkboxGroup);
+
+        let enableSubmit = ((checkboxGroup, enableSubmit = false)=>{
+            for (const checked of checkboxGroup) {
+                if (checked) enableSubmit = true;
+            }
+            return enableSubmit;
+        })(checkboxGroup);
+        // Register an event handler in your form tag for the onSubmit event
+        return <form onSubmit={handleSubmit}>
+            <fieldset>
+                <legend>Select your favorite movie(s) of all time:</legend>
+                { favouriteItemList.map( movies =>
+                    <React.Fragment key={movies.id}>
+                        <label>
+                            <input type='checkbox' name='checkboxGroup' value={movies.id}
+                                   checked={checkboxGroup[movies.id]}
+                                   onChange={handleCheckbox} />
+                            &nbsp;{movies.itemName}
+                        </label>
+                        <br /><br />
+                    </React.Fragment>
+                )}
+                {/* Submit with ternary operator - conditional rendering */}
+                {/* The Submit button should be disabled if no checkboxes are checked */}
+                {enableSubmit
+                    ? <input type='submit' value='Submit' />
+                    : <input type='submit' value='Submit' disabled />
+                }
+            </fieldset>
+        </form>;
+    }
+
+    const App = ({className}) => {
+        const [favouriteItemList, setFavouriteItemList] = React.useState([]);
+        const [showForm, setShowForm] = React.useState(true);
+
+        React.useEffect(() => {
+            // console.log("useEffect was executed!");
+            const url = "http://10.21.75.149:3004/movies";
+
+            (async () => {
+                try {
+                    const { data } = await axios.get(url);
+                    setFavouriteItemList(data)
+
+                } catch (error) {
+                    console.log("API Error: " + error);
+                }
+            })();
+        }, [showForm]);
+
+
+
+        // Conditional Rendering
+        // If showForm is true, render the FavoriteItemForm Component. If showForm is false, render the FavoriteItemList
+        return <div className={className}>
+            <Header />
+            {showForm
+                ? <FavoriteItemForm favouriteItemList={favouriteItemList} setShowForm={setShowForm}/>
+                : <FavoriteItemList favouriteItemList={favouriteItemList}/>
+            }
+        </div>;
+    }
+    // Add at least 3
+    const StyledApp = styled(App)`
+      margin: 40px;
+      padding: 30px;
+      background-color: Maroon;
+      border-radius: 30px;
+      li:hover {
+        color: gold;
+      }
+      a {
+        color: Ivory;
+      }
+      a:hover {
+        color: Crimson;
+      }
+      a:link {
+        text-decoration: none;
+      }
+
+      legend {
+        color: Ivory;
+      }
+      label {
+        color: Ivory;
+      }
+
+    `;
+    const StyledHeader = styled.h1`
+      font-family: 'Lato', sans-serif;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-size: 3rem;
+      color: white;
+    `
+    const StyledName = styled.h3`
+      font-family: 'Ubuntu', sans-serif;
+      letter-spacing: 3px;
+      color: #ffb536;
+    `
+    const StyledListItem = styled.li`
+      font-family: 'Mulish', sans-serif;
+      margin-left: ${props => props.marginLeft};
+      padding-top: 5px;
+      color: Moccasin;
+    `
+
+    ReactDOM.render(
+        <StyledApp />, document.getElementById('container')
+    );
+
+</script>
+</body>
+</html>

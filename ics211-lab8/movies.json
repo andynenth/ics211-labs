@@ -1,0 +1,39 @@
+{
+  "movies": [
+    {
+      "id": 0,
+      "itemName": "Alien",
+      "itemLink": "https://www.rottentomatoes.com/m/alien",
+      "marginLeft": "0px",
+      "checked": false
+    },
+    {
+      "id": 1,
+      "itemName": "The Lion King",
+      "itemLink": "https://www.imdb.com/title/tt0110357/",
+      "marginLeft": "16px",
+      "checked": false
+    },
+    {
+      "id": 2,
+      "itemName": "Pulp Fiction",
+      "itemLink": "https://www.youtube.com/watch?v=s7EdQ4FqbhY",
+      "marginLeft": "32px",
+      "checked": true
+    },
+    {
+      "id": 3,
+      "itemName": "Batman",
+      "itemLink": "https://en.wikipedia.org/wiki/Batman_(1989_film)",
+      "marginLeft": "48px",
+      "checked": true
+    },
+    {
+      "id": 4,
+      "itemName": "Django Unchained",
+      "itemLink": "https://djangounchained.fandom.com/wiki/Django",
+      "marginLeft": "64px",
+      "checked": false
+    }
+  ]
+}
